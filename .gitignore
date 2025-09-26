@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+
+# Virtual Environment
+venv/
+env/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# SSH Keys
+*.pem
+*.p12
+*.key
+*.p8
+*.srl
+*.p7b
+*.p7s
+*.p7c
+*.cer
+*.crt
+*.pfx
+*.der
+*.p7r
+*.srk
+*.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

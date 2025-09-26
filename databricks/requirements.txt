@@ -1,0 +1,16 @@
+# Core Dependencies
+azure-identity>=1.12.0
+azure-mgmt-resource>=21.1.0
+python-dotenv>=0.21.0
+
+# Databricks SDK
+databricks-sdk>=0.8.0
+
+# Development Dependencies
+pytest>=7.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# Azure CLI (for authentication)
+# Note: This is optional if you're using Azure CLI for authentication
+# azure-cli>=2.0.0
