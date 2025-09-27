@@ -1,0 +1,10 @@
+# Databricks cluster default configuration for Fix-It-Fred
+# Provide your workspace host via .env (DATABRICKS_HOST) or CLI --host/--token when running scripts.
+
+name: fixitfred-dev
+spark_version_key: 16.3.x-photon-scala2.12
+node_type_id: Standard_DS3_v2
+workers: 1
+autotermination_minutes: 15
+# Optional: if your workspace enforces policies, set it here
+# policy_id: <cluster-policy-id>

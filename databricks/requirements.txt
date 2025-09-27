@@ -2,6 +2,7 @@
 azure-identity>=1.12.0
 azure-mgmt-resource>=21.1.0
 python-dotenv>=0.21.0
+PyYAML>=6.0
 
 # Databricks SDK
 databricks-sdk>=0.8.0
