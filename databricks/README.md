@@ -2,22 +2,104 @@
 
 This directory contains Python scripts for managing Databricks workspaces and clusters programmatically.
 
-## Files
+## Setup
 
-### 1. deploy_databricks_workspace.py
-A Python script for deploying and managing Databricks workspaces. This script likely handles the creation and configuration of Databricks workspaces, including cluster setup, job creation, and workspace configuration.
+1. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 2. stop_databricks_clusters.py
-A utility script to stop all running Databricks clusters. This can be used for cost optimization by ensuring clusters are not left running when not in use.
+2. **Environment Setup**:
+   - Copy `.env.example` to `.env` in this directory:
+     ```bash
+     cp .env.example .env
+     ```
+   - Update `.env` with your actual values:
+     ```ini
+     DATABRICKS_HOST=https://your-workspace.azuredatabricks.net
+     DATABRICKS_TOKEN=your_personal_access_token
+     ```
 
-### 3. start_databricks_clusters.py
-A utility script to start Databricks clusters so the environment is ready for development or production. You can start all clusters, a specific cluster by ID, or by name, and optionally wait for them to reach RUNNING.
+## Authentication
 
-### 4. manage_cluster_from_config.py
-Create, recreate, ensure, start, stop, or check status of a default cluster defined in `cluster_config.yaml`.
+The scripts support two authentication methods (in order of priority):
+1. **Personal Access Token (PAT)** - Recommended
+   - Set `DATABRICKS_TOKEN` in `.env` or pass via `--token` flag
+2. **Azure CLI** - Fallback
+   - Requires `az login` with appropriate permissions
 
-### 5. cluster_config.yaml
-YAML file with the reusable defaults for the small dev cluster (e.g., `fixitfred-dev`, Spark version, node type, workers, auto-termination minutes).
+## Available Scripts
+
+### 1. `manage_cluster_from_config.py`
+
+Main script for cluster operations using `cluster_config.yaml`:
+
+```bash
+# Ensure cluster exists and is running (create if needed)
+python manage_cluster_from_config.py --host $DATABRICKS_HOST ensure --wait
+
+# Recreate cluster (delete if exists, then create)
+python manage_cluster_from_config.py --host $DATABRICKS_HOST recreate --wait
+
+# Stop cluster
+python manage_cluster_from_config.py --host $DATABRICKS_HOST stop --wait
+
+# Check cluster status
+python manage_cluster_from_config.py --host $DATABRICKS_HOST status
+```
+
+### 2. `start_databricks_clusters.py`
+
+Alternative script with more cluster management options:
+
+```bash
+# Start all non-running clusters
+python start_databricks_clusters.py --all --wait
+
+# Start specific cluster by name
+python start_databricks_clusters.py --name "fixitfred-dev" --wait
+
+# Stop all clusters (requires confirmation)
+python start_databricks_clusters.py --all --stop-after-ready
+```
+
+### 3. `deploy_databricks_workspace.py`
+Script for deploying and managing Databricks workspaces, including cluster setup and workspace configuration.
+
+### 4. `stop_databricks_clusters.py`
+Script for stopping Databricks clusters.
+
+### 5. Helper Scripts
+- `create_verify_stop_cluster.py`: Example workflow for cluster lifecycle
+- `list_databricks_options.py`: List available cluster configurations
+- `cluster_config.yaml`: Configuration for the default dev cluster (e.g., `fixitfred-dev`, Spark version, node type, workers, auto-termination minutes)
+
+## Cost Management
+
+- Clusters incur costs while running
+- Default auto-termination: 15 minutes of inactivity
+- Always stop clusters when not in use:
+  ```bash
+  python manage_cluster_from_config.py --host $DATABRICKS_HOST stop --wait
+  ```
+
+## Development
+
+- **Testing**: Run `pytest` in the `databricks` directory
+- **Linting**: `flake8 .` and `black .`
+- **Formatting**: `black .` before committing
+
+## Troubleshooting
+
+- **Authentication Errors**:
+  - Verify `DATABRICKS_TOKEN` is valid
+  - Ensure Azure CLI is logged in if using that method
+  - Check workspace URL in `DATABRICKS_HOST`
+
+- **Cluster Issues**:
+  - Check Databricks UI for detailed logs
+  - Verify network connectivity to Databricks workspace
+  - Ensure sufficient permissions in Databricks workspace
 
 ### 6. .env
 Environment configuration file containing sensitive information and configuration parameters required by the scripts. **Important**: Never commit sensitive information to version control. This file should be listed in .gitignore.
